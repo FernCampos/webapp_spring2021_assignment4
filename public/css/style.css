@@ -1,0 +1,312 @@
+/*
+ * Globals
+ */
+
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+}
+
+.cover-container {
+  max-width: 60em;
+}
+
+
+/*
+ * Header
+ */
+
+.nav-masthead .nav-link {
+  padding: .25rem 0;
+  font-weight: 500;
+  color: rgba(255, 255, 255, .5);
+  background-color: transparent;
+  border-bottom: .25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+  border-bottom-color: rgba(255, 255, 255, .25);
+}
+
+.nav-masthead .nav-link + .nav-link {
+  margin-left: 1rem;
+}
+
+.nav-masthead .active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.default-background{
+  height: 100%;
+    background-image: url('/images/bg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.global-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #2786CF;
+}
+
+/*  Sign up form  */
+
+
+.signup-form{
+  width: 25em;
+  height: 35em;
+  margin:20px;
+  background-color: White;
+  border-radius: 10px;
+  text-align: justify;
+}
+
+.form{
+  padding-top: 10px;
+  font-size: 14px;
+  margin-top: 60px;
+  color: #2786CF;
+}
+
+.form-floating{
+  padding-bottom: 10px;
+}
+
+.form-select{
+  margin-bottom: 20px;
+}
+
+.btn{
+  border:none;
+  background: #2786CF;
+  padding: 5px 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.card-title{
+    text-align: center;
+}
+
+#loginBtn{
+  width: 100%;
+}
+
+#logo{
+    font-size: 10em;
+    color: white;
+}
+
+.visible {
+  visibility: visible;
+}
+.invisible {
+  visibility: hidden;
+}
+
+.form-nav-container{
+  width: 480px;
+  height: 40px;
+  margin-top: 520px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.signup-container{
+  width: 480px;
+  /*height: 100%;*/
+  margin: 3% auto;
+  background: white;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+h3{
+  color: #2786CF;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.signup-container form{
+  width: 80%;
+  position: sticky;
+  top: 5%;
+  left: 10%;
+  right: 10%;
+  transition-duration: 0.5s;
+}
+
+form input{
+  width: 100%;
+  padding-bottom: 10px;
+  padding: 10x 5px;
+  margin: 5px 0;
+  border: 0;
+  border-bottom: 1px solid #999;
+  outline: none;
+  background: transparent;
+}
+
+.btn-box{
+  width: 100%;
+  bottom: 0px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+form button{
+  width: 110px;
+  height: 35px;
+  margin: 0 10px;
+  background: linear-gradient(to right, #2786CF, #27BFCF);
+  border-radius: 30px;
+  border:0;
+  outline: none;
+  color: white; 
+}
+
+.step-row{
+  width: 480px;
+  height: 40px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -1px 5px -1px #000;
+  position: relative;
+}
+
+.step-col{
+  width: 120px;
+  text-align: center;
+  color: #333;
+  position: relative;
+}
+
+.form-nav-button{
+  width: 360px;
+  height: 40px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+#progress{
+  position: absolute;
+  height: 100%;
+  width: 120px;
+  background: linear-gradient(to right, #2786CF, #27BFCF);
+  transition-duration: 1s;
+}
+
+#progress::after{
+  content: "";
+  height: 0;
+  width: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  position: absolute;
+  right: -20px;
+  top: 0;
+  border-left: 20px solid #27BFCF;
+}
+
+#form2{
+  left: 600px;
+}
+#form3{
+  left: 600px;
+}
+#form4{
+  left: 600px;
+}
+
+/*  Sign in form  */
+
+.login-form{
+  width: 25em;
+  height: 30em;
+  margin:0;
+  color: #2786CF;
+  background-color: White;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+.login-container{
+  width: 360px;
+  height: 450px;
+  margin: 8% auto;
+  background: white;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  color: #2786CF;
+}
+
+.login-container h3{
+  color: #2786CF;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-container form{
+  width: 280px;
+  position: absolute;
+  left: 40px;
+  transition-duration: 0.5s;
+}
+
+.feedpage, .profilepage{
+  border-radius: 10px;
+  border-width:2px;
+}
+
+.usertwez, .profilebox{
+  color:#333;
+  background-color: white;
+  border-radius: 10px;
+  margin: 5px;
+  align-items: center;
+}
+
+.btn-box-actions{
+  margin: 10px;
+  text-align: center;
+  align-items: right;
+}
+
+.username{
+  color:#2786CF;
+}
+
+.hashtag{
+  color:#2786CF;
+  
+}
+
+.defaultprofile{
+  width: 80px;
+  height: 80px;
+}
+
+/* Error Handling */
+
+.hasError{
+  background-color: lightcoral;
+}

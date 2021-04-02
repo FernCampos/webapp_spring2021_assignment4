@@ -1,0 +1,23 @@
+<h2 class="center">Users</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% users.forEach(user => { %>
+            <tr>
+                <td>
+                    <a href="<%= `/users/${user._id}` %>">
+                        <%= user.userName %>
+                    </a>
+                </td>
+                <td>
+                    <%= user.email %>
+                </td>
+            </tr>
+       <% }) %>
+    </tbody>
+</table>
