@@ -310,3 +310,17 @@ form button{
 .hasError{
   background-color: lightcoral;
 }
+
+/* flash messages */
+
+.flash {
+  background: lightcyan;
+  color: royalblue;
+  width: 100%;
+  text-align: center;
+}
+
+.error {
+  color: red;
+  background: lightcoral;
+}

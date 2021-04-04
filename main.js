@@ -1,3 +1,6 @@
+const {cookie} = require("express-validator");
+const passport = require("passport");
+
 const express = require("express"), app = express(),
 homeController = require("./controllers/homeController"),
 usersController = require("./controllers/usersController"),
@@ -5,6 +8,11 @@ errorController = require("./controllers/errorController"),
 layouts = require("express-ejs-layouts"),
 methodOverride = require("method-override"),
 router = express.Router(),
+cookieParser = require("cookie-parser"),
+expressSession = require("express-session"),
+expressValidator = require("express-validator"),
+connectFlash = require("connect-flash"),
+User = require("./models/user"),
 mongoose = require("mongoose");
 
 mongoose.connect(
@@ -15,9 +23,8 @@ mongoose.connect(
 app.set("port", process.env.PORT || 3000);
 
 app.set("view engine", "ejs");
-router.use(layouts);
-
 router.use(express.static("public"));
+router.use(layouts);
 
 router.use(
     express.urlencoded({
@@ -30,10 +37,36 @@ router.use(methodOverride("_method", {
 }));
 router.use(express.json());
 
+router.use(cookieParser("my_passcode"));
+router.use(expressSession({
+    secret: "my_passcode",
+    cookie: {
+        maxAge: 360000
+    },
+    resave: false,
+    saveUninitialized: false
+}));
+
+router.use(passport.initialize());
+router.use(passport.session());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+router.use(connectFlash());
+
+router.use((req, res, next) =>{
+    res.locals.flashMessages = req.flash();
+    //res.locals.loggedIn = req.isAuthenticated();
+    //res.locals.currentUser = req.user;
+    next();
+});
+
+router.use(expressValidator());
+
 router.get("/", homeController.showIndex);
 
 router.get("/signup", usersController.showSignup);
-router.post("/signingUp", usersController.signingUp);
+router.post("/signingUp", usersController.validate, usersController.signingUp, usersController.redirectView);
 
 router.get("/login", usersController.showLogin);
 router.post("/loginuser", usersController.loginUser);
