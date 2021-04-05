@@ -52,6 +52,18 @@ module.exports = {
     showLogin: (req, res) => {
         res.render("login")
     },
+    authenticate: passport.authenticate("local", {
+        failureRedirect: "/login",
+        failureFlash: "Login Failed! Check your email or password!",
+        successRedirect: "/",
+        successFlash: "Logged in!"
+    }),
+    logout: (req, res, next) => {
+        req.logout();
+        req.flash("success", "You have been logged out!");
+        res.locals.redirect = "/";
+        next();
+    },
     loginUser: (req, res) => {
         User.findOne({
             email: req.body.email
