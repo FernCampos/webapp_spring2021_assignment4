@@ -32,9 +32,9 @@
         </div>
         <!--User Twez-->
         <div class="col-md-12 usertwez">
-            <form>
+            <form action="<%= `/posts/${currentUser._id}/create` %>" method="POST">
                 <label for="createTwez">Write a Twez</label>
-                <textarea class="form-control" id="createTwez"></textarea>
+                <textarea class="form-control" id="createTwez" name="twezInput"></textarea>
                 <div class="btn-box-actions">
                     <button type="submit">Write</button>
                 </div>

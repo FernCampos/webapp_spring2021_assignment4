@@ -5,6 +5,7 @@ const express = require("express"), app = express(),
 homeController = require("./controllers/homeController"),
 usersController = require("./controllers/usersController"),
 errorController = require("./controllers/errorController"),
+postsController = require("./controllers/postsController"),
 layouts = require("express-ejs-layouts"),
 methodOverride = require("method-override"),
 router = express.Router(),
@@ -77,6 +78,8 @@ router.get("/home", homeController.showHomepage);
 
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/:id", usersController.show, usersController.showView);
+
+router.post("/posts/:id/create", postsController.create);
 
 router.use(errorController.pageNotFoundError);
 router.use(errorController.internalServerError);

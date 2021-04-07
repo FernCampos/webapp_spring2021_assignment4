@@ -1,5 +1,7 @@
 const passportLocalMongoose = require("passport-local-mongoose");
 
+const Post = require("./post");
+
 const mongoose = require("mongoose"),
 userSchema = mongoose.Schema({
     name: {
@@ -42,7 +44,8 @@ userSchema = mongoose.Schema({
     },
     description: {
         type: String
-    }
+    },
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: Post}]
 });
 
 userSchema.plugin(passportLocalMongoose, {
