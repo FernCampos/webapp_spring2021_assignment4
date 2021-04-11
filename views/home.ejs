@@ -1,3 +1,4 @@
+<% if(loggedIn) { %>
 <div class="container">
     <div class="row">
         <div class="col usertwez">
@@ -19,6 +20,9 @@
             </div>
             <div>Who to Follow</div>
             <div>Trends</div>
+            <div>
+                <a href="<%= `/users/${currentUser._id}/edit` %>">Edit Info</a>
+            </div>
 
         </div>
         <div class="col usertwez">
@@ -96,3 +100,8 @@
         </div>
     </div>
 </div>
+<% } else { %>
+<div class="container">
+    <h2>You must login to view your homepage!</h2>
+</div>
+<% } %>

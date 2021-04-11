@@ -9,6 +9,7 @@ module.exports = {
         });
         Post.create(newPost)
         .then(course =>{
+            // add post to user object
             User.findByIdAndUpdate(userId, {$push: {posts:course._id}})
             .then(user=>{
                 console.log(user.posts);
@@ -21,5 +22,22 @@ module.exports = {
         .catch(error => {
             console.log(`Error saving post: ${error.message}`);
         });
+    },
+    delete: (req, res, next) => {
+        let postId = req.params.id;
+        Post.findByIdAndRemove(postId)
+            .then(() => {
+                res.locals.redirect = "/home";
+                next();
+            })
+            .catch(error => {
+                console.log(`Error fetching post by ID: ${error.message}`);
+                next(error);
+            })
+    },
+    redirectView: (req, res, next) =>{
+        let redirectPath = res.locals.redirect;
+        if(redirectPath != undefined) res.redirect(redirectPath);
+        else next();
     }
 }

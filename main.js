@@ -78,8 +78,11 @@ router.get("/home", homeController.showHomepage);
 
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/:id", usersController.show, usersController.showView);
+router.get("/users/:id/edit", usersController.edit);
+router.put("/users/:id/update", usersController.update, usersController.redirectView);
 
 router.post("/posts/:id/create", postsController.create);
+router.delete("/posts/:id/delete", postsController.delete, postsController.redirectView);
 
 router.use(errorController.pageNotFoundError);
 router.use(errorController.internalServerError);

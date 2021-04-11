@@ -123,7 +123,6 @@ module.exports = {
         let userId = req.params.id;
         User.findById(userId)
             .then(user => {
-                console.log(user);
                 // Find each post by the user by iterating over the posts array
                 for(let i = 0; i < user.posts.length; i++){
                     // search for the posts by ID with a promise chain
@@ -144,6 +143,43 @@ module.exports = {
     },
     showView: (req, res) => {
         res.render("users/show");
+    },
+    edit: (req, res, next) => {
+        let userId = req.params.id;
+        User.findById(userId)
+        .then(user => {
+            res.render("users/edit", {user: user});
+        })
+        .catch(error => {
+            console.log(`Error fetching user by ID: ${error.message}`);
+            next(error);
+        });
+    },
+    update: (req, res, next) => {
+        let userId = req.params.id;
+        let dob = req.body.dob_month + "/" + req.body.dob_day + "/" + req.body.dob_year;
+        User.findByIdAndUpdate(userId,
+            {
+                $set:
+                {
+                    'name.first': req.body.fname,
+                    'name.last': req.body.lname,
+                    dateOfBirth: dob,
+                    userName: req.body.username,
+                    email: req.body.email,
+                    location: req.body.location,
+                    description: req.body.bio
+                }
+            })
+            .then(user => {
+                res.locals.user = user;
+                res.locals.redirect = "/home";
+                next();
+            })
+            .catch(error => {
+                console.log(`Error fetching user by ID: ${error.message}`);
+                next(error);
+            });
     },
     redirectView: (req, res, next) => {
         let redirectPath = res.locals.redirect;
