@@ -1,5 +1,6 @@
 const User = require("../models/user")
 const passport = require("passport");
+const Post = require("../models/post");
 
 const getUserParams = body => {
     let dob = body.dob_month + "/" + body.dob_day + "/" + body.dob_year;
@@ -122,6 +123,18 @@ module.exports = {
         let userId = req.params.id;
         User.findById(userId)
             .then(user => {
+                console.log(user);
+                // Find each post by the user by iterating over the posts array
+                for(let i = 0; i < user.posts.length; i++){
+                    // search for the posts by ID with a promise chain
+                    Post.findById(user.posts[i])
+                    .then(post => {
+                        console.log(post.text);
+                    })
+                    .catch(error => {
+                        console.log(`Error getting post: ${error.message}`);
+                    })
+                }
                 res.locals.user = user;
                 next();
             })
