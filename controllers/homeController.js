@@ -4,8 +4,5 @@ module.exports = {
     },
     showFeed: (req, res) => {
         res.render("feed")
-    },
-    showHomepage: (req, res) => {
-        res.render("home")
     }
 }
