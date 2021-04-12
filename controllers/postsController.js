@@ -13,6 +13,8 @@ module.exports = {
             User.findByIdAndUpdate(userId, {$push: {posts:course._id}})
             .then(user=>{
                 console.log(user.posts);
+                res.locals.redirect = `/home/${userId}`;
+                next();
             })
             .catch(error=>{
                 console.log(`Error fetching user by ID: ${error.message}`);

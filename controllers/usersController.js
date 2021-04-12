@@ -24,7 +24,7 @@ const getUserParams = body => {
     }
 }
 
-var errors = [];
+var usersposts = [];
 
 var loginError = {
     description: "Email or password is incorrect!"
@@ -85,16 +85,16 @@ module.exports = {
             });
     },
     signingUp: (req, res, next) => {
-        if(req.skip) return next();
+        if (req.skip) return next();
         let newUser = new User(getUserParams(req.body));
-        
+
         User.register(newUser, req.body.password, (error, user) => {
-            if(user){
+            if (user) {
                 req.flash("success", "User account successfully created!");
                 res.locals.redirect = "/users";
                 next();
             }
-            else{
+            else {
                 req.flash("error", `Failed to create user account: ${error.message}`);
                 res.locals.redirect = "/signup";
                 next();
@@ -107,10 +107,10 @@ module.exports = {
         }).trim();
         req.check("email", "email is not valid!").isEmail();
         req.check("password", "Password cannot be empty!").notEmpty();
-        
-        req.getValidationResult().then((error) =>{
-            if(!error.isEmpty()){
-                let messages = error.array().map(e=>e.msg);
+
+        req.getValidationResult().then((error) => {
+            if (!error.isEmpty()) {
+                let messages = error.array().map(e => e.msg);
                 req.flash("error", messages.join(" and "));
                 req.skip = true;
                 res.locals.redirect = "/signup";
@@ -124,21 +124,26 @@ module.exports = {
         User.findById(userId)
             .then(user => {
                 // Find each post by the user by iterating over the posts array
-                for(let i = 0; i < user.posts.length; i++){
+                for (let i = 0; i < user.posts.length; i++) {
                     // search for the posts by ID with a promise chain
                     Post.findById(user.posts[i])
-                    .then(post => {
-                        console.log(post.text);
-                    })
-                    .catch(error => {
-                        console.log(`Error getting post: ${error.message}`);
-                    })
+                        .then(post => {
+                            usersposts.push({
+                                text: post.text
+                            });
+                        })
+                        .catch(error => {
+                            console.log(`Error getting post: ${error.message}`);
+                        });
                 }
                 res.locals.user = user;
+                res.locals.usersposts = usersposts;
+                usersposts = [];
                 next();
             })
             .catch(error => {
                 console.log(`Error fetching user by ID: ${error.message}`);
+                next(error);
             });
     },
     showView: (req, res) => {
@@ -147,13 +152,13 @@ module.exports = {
     edit: (req, res, next) => {
         let userId = req.params.id;
         User.findById(userId)
-        .then(user => {
-            res.render("users/edit", {user: user});
-        })
-        .catch(error => {
-            console.log(`Error fetching user by ID: ${error.message}`);
-            next(error);
-        });
+            .then(user => {
+                res.render("users/edit", { user: user });
+            })
+            .catch(error => {
+                console.log(`Error fetching user by ID: ${error.message}`);
+                next(error);
+            });
     },
     update: (req, res, next) => {
         let userId = req.params.id;

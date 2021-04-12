@@ -44,15 +44,17 @@
                 </div>
             </form>
         </div>
+        <% if(typeof usersposts !== "undefined"){ %>
+            <% usersposts.forEach(item => { %>
         <div class="col-md-12 usertwez">
             <div>
                 <img class="defaultprofile" src="/images/feather.png" alt="default profile picture">
             </div>
             <div>
-                Username
+                <%= user.userName %>
             </div>
             <div>
-                I'm new to Twezzy! Hello! <span class="hashtag">#waddleclub</span>
+                <p><%= item.text %></p>
             </div>
             <form>
                 <div class="btn-box-actions">
@@ -62,42 +64,8 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-12 usertwez">
-            <div>
-                <img class="defaultprofile" src="/images/feather.png" alt="default profile picture">
-            </div>
-            <div>
-                Username
-            </div>
-            <div>
-                I'm new to Twezzy! Hello! <span class="hashtag">#waddleclub</span>
-            </div>
-            <form>
-                <div class="btn-box-actions">
-                    <button type="button">Comment</button>
-                    <button type="button">Like</button>
-                    <button type="button">Dislike</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-12 usertwez">
-            <div>
-                <img class="defaultprofile" src="/images/feather.png" alt="default profile picture">
-            </div>
-            <div>
-                Username
-            </div>
-            <div>
-                I'm new to Twezzy! Hello! <span class="hashtag">#waddleclub</span>
-            </div>
-            <form>
-                <div class="btn-box-actions">
-                    <button type="button">Comment</button>
-                    <button type="button">Like</button>
-                    <button type="button">Dislike</button>
-                </div>
-            </form>
-        </div>
+        <% }) %>
+        <% } %>
     </div>
 </div>
 <% } else { %>
