@@ -45,8 +45,12 @@ userSchema = mongoose.Schema({
     description: {
         type: String
     },
-    posts: [{type: mongoose.Schema.Types.ObjectId, ref: Post}]
-});
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}]
+},
+{
+    timestamps: true
+}
+);
 
 userSchema.plugin(passportLocalMongoose, {
     usernameField: "email"

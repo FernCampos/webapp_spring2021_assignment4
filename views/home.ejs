@@ -9,17 +9,15 @@
             <!--Profile information-->
             <div>
                 <div>
-                    Full Name
+                    <%= currentUser.name.first + " " + currentUser.name.last %>
                 </div>
                 <div>
-                    Username
+                    <%= currentUser.userName %>
                 </div>
                 <div>
                     Twez Count
                 </div>
             </div>
-            <div>Who to Follow</div>
-            <div>Trends</div>
             <div>
                 <a href="<%= `/users/${currentUser._id}/edit` %>">Edit Info</a>
             </div>

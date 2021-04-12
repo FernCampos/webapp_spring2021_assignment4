@@ -315,6 +315,7 @@ form button{
 
 .flash {
   background: lightcyan;
+  border-radius: 10px;
   color: royalblue;
   width: 100%;
   text-align: center;

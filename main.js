@@ -74,8 +74,8 @@ router.post("/loginuser", usersController.authenticate);
 router.get("/logout", usersController.logout, usersController.redirectView);
 
 router.get("/feed", homeController.showFeed);
-router.get("/home", homeController.showHomepage);
-router.get("/home/:id", usersController.show, homeController.showHomepage);
+router.get("/home", usersController.showHomepage);
+router.get("/home/:id", usersController.show, usersController.showHomepage);
 
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/:id", usersController.show, usersController.showView);

@@ -5,7 +5,8 @@ module.exports = {
     create: (req, res, next) => {
         let userId = req.params.id;
         let newPost = new Post({
-            text: req.body.twezInput
+            text: req.body.twezInput,
+            author: userId
         });
         Post.create(newPost)
         .then(course =>{

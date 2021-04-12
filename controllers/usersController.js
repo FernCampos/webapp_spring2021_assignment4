@@ -56,7 +56,7 @@ module.exports = {
     authenticate: passport.authenticate("local", {
         failureRedirect: "/login",
         failureFlash: "Login Failed! Check your email or password!",
-        successRedirect: "/",
+        successRedirect: "/home",
         successFlash: "Logged in!"
     }),
     logout: (req, res, next) => {
@@ -119,27 +119,22 @@ module.exports = {
             else next();
         });
     },
+    showHomepage: (req, res) => {
+        res.render("home")
+    },
     show: (req, res, next) => {
         let userId = req.params.id;
         User.findById(userId)
             .then(user => {
-                // Find each post by the user by iterating over the posts array
-                for (let i = 0; i < user.posts.length; i++) {
-                    // search for the posts by ID with a promise chain
-                    Post.findById(user.posts[i])
-                        .then(post => {
-                            usersposts.push({
-                                text: post.text
-                            });
-                        })
-                        .catch(error => {
-                            console.log(`Error getting post: ${error.message}`);
-                        });
-                }
-                res.locals.user = user;
-                res.locals.usersposts = usersposts;
-                usersposts = [];
-                next();
+                Post.find({ author: userId })
+                    .then(posts => {
+                        res.locals.user = user;
+                        res.locals.usersposts = posts;
+                        next();
+                    })
+                    .catch(error => {
+                        console.log(`Error retrieving posts: ${error.message}`);
+                    });
             })
             .catch(error => {
                 console.log(`Error fetching user by ID: ${error.message}`);
