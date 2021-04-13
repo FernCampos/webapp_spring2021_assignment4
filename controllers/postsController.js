@@ -1,5 +1,5 @@
 const User = require("../models/user"),
-Post = require("../models/post");
+    Post = require("../models/post");
 
 module.exports = {
     create: (req, res, next) => {
@@ -9,38 +9,63 @@ module.exports = {
             author: userId
         });
         Post.create(newPost)
-        .then(course =>{
-            // add post to user object
-            User.findByIdAndUpdate(userId, {$push: {posts:course._id}})
-            .then(user=>{
-                console.log(user.posts);
-                res.locals.redirect = `/home/${userId}`;
-                next();
+            .then(course => {
+                // add post to user object
+                User.findByIdAndUpdate(userId, { $push: { posts: course._id } })
+                    .then(user => {
+                        res.locals.redirect = `/home/${userId}`;
+                        next();
+                    })
+                    .catch(error => {
+                        console.log(`Error fetching user by ID: ${error.message}`);
+                        next(error);
+                    })
             })
-            .catch(error=>{
-                console.log(`Error fetching user by ID: ${error.message}`);
-                next(error);
-            })
-        })
-        .catch(error => {
-            console.log(`Error saving post: ${error.message}`);
-        });
+            .catch(error => {
+                console.log(`Error saving post: ${error.message}`);
+            });
     },
     delete: (req, res, next) => {
         let postId = req.params.id;
-        Post.findByIdAndRemove(postId)
-            .then(() => {
-                res.locals.redirect = "/home";
-                next();
+        var item = undefined;
+        // find the post by ID
+        Post.findById(postId)
+            .then(post => {
+                // if the logged in user id is equal to the post author id, continue
+                if (res.locals.currentUser._id.equals(post.author)) {
+                    // find the post by ID and remove
+                    Post.findByIdAndRemove(postId)
+                        .then(() => {
+                            User.findByIdAndUpdate(res.locals.currentUser._id,
+                                { $pull: { posts: post._id } }
+                            )
+                                .then(user => {
+                                    res.locals.redirect = `/home/${user._id}`;
+                                    next();
+                                })
+                                .catch(error => {
+                                    console.log(`Error updating user posts: ${error.message}`);
+                                })
+                        })
+                        .catch(error => {
+                            console.log(`Error fetching post by ID: ${error.message}`);
+                            next(error);
+                        });
+                }
+                // else send a flash message notifying user they can only delete their own posts
+                else {
+                    req.flash("error", "You can only delete your own posts!");
+                    res.locals.redirect = "/home";
+                    next();
+                }
             })
             .catch(error => {
-                console.log(`Error fetching post by ID: ${error.message}`);
-                next(error);
+                console.log(`Error finding post: ${error.message}`);
             })
     },
-    redirectView: (req, res, next) =>{
+    redirectView: (req, res, next) => {
         let redirectPath = res.locals.redirect;
-        if(redirectPath != undefined) res.redirect(redirectPath);
+        if (redirectPath != undefined) res.redirect(redirectPath);
         else next();
     }
 }
