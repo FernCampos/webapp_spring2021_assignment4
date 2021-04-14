@@ -135,26 +135,26 @@ module.exports = {
         res.render("home")
     },
     showCurrentUser: (req, res, next) => {
-        if(res.locals.loggedIn){
-        let currentUserId = res.locals.currentUser._id;
-        User.findById(currentUserId)
-            .then(user => {
-                Post.find({ author: currentUserId })
-                    .then(posts => {
-                        res.locals.user = user;
-                        res.locals.usersposts = posts;
-                        next();
-                    })
-                    .catch(error => {
-                        console.log(`Error retrieving posts: ${error.message}`);
-                    });
-            })
-            .catch(error => {
-                console.log(`Error fetching user by ID: ${error.message}`);
-                next(error);
-            });
+        if (res.locals.loggedIn) {
+            let currentUserId = res.locals.currentUser._id;
+            User.findById(currentUserId)
+                .then(user => {
+                    Post.find({ author: currentUserId })
+                        .then(posts => {
+                            res.locals.user = user;
+                            res.locals.usersposts = posts;
+                            next();
+                        })
+                        .catch(error => {
+                            console.log(`Error retrieving posts: ${error.message}`);
+                        });
+                })
+                .catch(error => {
+                    console.log(`Error fetching user by ID: ${error.message}`);
+                    next(error);
+                });
         }
-        else{
+        else {
             next();
         }
     },
@@ -194,28 +194,36 @@ module.exports = {
     update: (req, res, next) => {
         let userId = req.params.id;
         let dob = req.body.dob_month + "/" + req.body.dob_day + "/" + req.body.dob_year;
-        User.findByIdAndUpdate(userId,
-            {
-                $set:
+        let loggedUser = res.locals.currentUser;
+        if (loggedUser._id.equals(userId)) {
+            User.findByIdAndUpdate(userId,
                 {
-                    'name.first': req.body.fname,
-                    'name.last': req.body.lname,
-                    dateOfBirth: dob,
-                    userName: req.body.username,
-                    email: req.body.email,
-                    location: req.body.location,
-                    description: req.body.bio
-                }
-            })
-            .then(user => {
-                res.locals.user = user;
-                res.locals.redirect = "/home";
-                next();
-            })
-            .catch(error => {
-                console.log(`Error fetching user by ID: ${error.message}`);
-                next(error);
-            });
+                    $set:
+                    {
+                        'name.first': req.body.fname,
+                        'name.last': req.body.lname,
+                        dateOfBirth: dob,
+                        userName: req.body.username,
+                        email: req.body.email,
+                        location: req.body.location,
+                        description: req.body.bio
+                    }
+                })
+                .then(user => {
+                    res.locals.user = user;
+                    res.locals.redirect = "/home";
+                    next();
+                })
+                .catch(error => {
+                    console.log(`Error fetching user by ID: ${error.message}`);
+                    next(error);
+                });
+        }
+        else {
+            req.flash("error", "You can only edit your own account!");
+            res.locals.redirect = "/home";
+            next();
+        }
     },
     redirectView: (req, res, next) => {
         let redirectPath = res.locals.redirect;
@@ -236,9 +244,10 @@ module.exports = {
                     next(error);
                 })
         }
-        else{
+        else {
             req.flash("error", "You can only delete your own account!");
             res.locals.redirect = "/home";
+            next();
         }
     }
 }

@@ -8,22 +8,30 @@ module.exports = {
             text: req.body.twezInput,
             author: userId
         });
-        Post.create(newPost)
-            .then(course => {
-                // add post to user object
-                User.findByIdAndUpdate(userId, { $push: { posts: course._id } })
-                    .then(user => {
-                        res.locals.redirect = "/home";
-                        next();
-                    })
-                    .catch(error => {
-                        console.log(`Error fetching user by ID: ${error.message}`);
-                        next(error);
-                    })
-            })
-            .catch(error => {
-                console.log(`Error saving post: ${error.message}`);
-            });
+        let loggedUser = res.locals.currentUser;
+        if (loggedUser._id.equals(userId)) {
+            Post.create(newPost)
+                .then(course => {
+                    // add post to user object
+                    User.findByIdAndUpdate(userId, { $push: { posts: course._id } })
+                        .then(user => {
+                            res.locals.redirect = "/home";
+                            next();
+                        })
+                        .catch(error => {
+                            console.log(`Error fetching user by ID: ${error.message}`);
+                            next(error);
+                        })
+                })
+                .catch(error => {
+                    console.log(`Error saving post: ${error.message}`);
+                });
+        }
+        else {
+            req.flash("error", "You can only post from your own account!");
+            res.locals.redirect = "/home";
+            next();
+        }
     },
     delete: (req, res, next) => {
         let postId = req.params.id;
@@ -40,7 +48,7 @@ module.exports = {
                                 { $pull: { posts: post._id } }
                             )
                                 .then(user => {
-                                    res.locals.redirect = `/home/${user._id}`;
+                                    res.locals.redirect = "/home";
                                     next();
                                 })
                                 .catch(error => {
