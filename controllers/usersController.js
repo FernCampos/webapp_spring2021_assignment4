@@ -102,11 +102,23 @@ module.exports = {
         });
     },
     validate: (req, res, next) => {
+        req.check("fname", "You must enter a first name").notEmpty();
+        req.check("lname", "you must enter a last name").notEmpty();
+        req.check("dob_month", "you must have a month in DOB").notEmpty();
+        req.check("dob_day", "you must have a day in DOB").notEmpty();
+        req.check("dob_year", "you must have a year in DOB").notEmpty();
         req.sanitizeBody("email").normalizeEmail({
             all_lowercase: true
         }).trim();
-        req.check("email", "email is not valid!").isEmail();
-        req.check("password", "Password cannot be empty!").notEmpty();
+        req.check("email", "email is not valid").isEmail();
+        req.check("email", "email cannot be empty").notEmpty();
+        req.check("password", "password cannot be empty").notEmpty();
+        req.check("password", "your password must include at least one capital letter, one lower case letter, and one number").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{3,}$/);
+        req.check("conf_password", "confirmed password cannot be empty").notEmpty();
+        req.check("password", "password and confirmed password do not match").equals(req.body.conf_password);
+        req.check("security_question", "security question must be selected").notEmpty();
+        req.check("security_answer", "security answer must be filled out").notEmpty();
+
 
         req.getValidationResult().then((error) => {
             if (!error.isEmpty()) {
@@ -121,6 +133,30 @@ module.exports = {
     },
     showHomepage: (req, res) => {
         res.render("home")
+    },
+    showCurrentUser: (req, res, next) => {
+        if(res.locals.loggedIn){
+        let currentUserId = res.locals.currentUser._id;
+        User.findById(currentUserId)
+            .then(user => {
+                Post.find({ author: currentUserId })
+                    .then(posts => {
+                        res.locals.user = user;
+                        res.locals.usersposts = posts;
+                        next();
+                    })
+                    .catch(error => {
+                        console.log(`Error retrieving posts: ${error.message}`);
+                    });
+            })
+            .catch(error => {
+                console.log(`Error fetching user by ID: ${error.message}`);
+                next(error);
+            });
+        }
+        else{
+            next();
+        }
     },
     show: (req, res, next) => {
         let userId = req.params.id;
@@ -188,15 +224,22 @@ module.exports = {
     },
     delete: (req, res, next) => {
         let userId = req.params.id;
-        User.findByIdAndRemove(userId)
-            .then(() => {
-                res.locals.redirect = "/users";
-                next();
-            })
-            .catch(error => {
-                console.log(`Error fetching user by ID: ${error.message}`);
-                next(error);
-            })
+        let loggedUser = res.locals.currentUser;
+        if (loggedUser._id.equals(userId)) {
+            User.findByIdAndRemove(userId)
+                .then(() => {
+                    res.locals.redirect = "/users";
+                    next();
+                })
+                .catch(error => {
+                    console.log(`Error fetching user by ID: ${error.message}`);
+                    next(error);
+                })
+        }
+        else{
+            req.flash("error", "You can only delete your own account!");
+            res.locals.redirect = "/home";
+        }
     }
 }
 

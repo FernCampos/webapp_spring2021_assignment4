@@ -13,7 +13,7 @@ module.exports = {
                 // add post to user object
                 User.findByIdAndUpdate(userId, { $push: { posts: course._id } })
                     .then(user => {
-                        res.locals.redirect = `/home/${userId}`;
+                        res.locals.redirect = "/home";
                         next();
                     })
                     .catch(error => {

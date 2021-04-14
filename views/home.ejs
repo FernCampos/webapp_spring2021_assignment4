@@ -21,6 +21,9 @@
             <div>
                 <a href="<%= `/users/${currentUser._id}/edit` %>">Edit Info</a>
             </div>
+            <div>
+                <a href="<%= `/users/${currentUser._id}/delete?_method=DELETE` %>" onclick="return confirm('Delete Account?')">Delete Account</a>
+            </div>
 
         </div>
         <div class="col usertwez">

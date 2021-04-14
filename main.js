@@ -74,13 +74,14 @@ router.post("/loginuser", usersController.authenticate);
 router.get("/logout", usersController.logout, usersController.redirectView);
 
 router.get("/feed", homeController.showFeed);
-router.get("/home", usersController.showHomepage);
-router.get("/home/:id", usersController.show, usersController.showHomepage);
+router.get("/home", usersController.showCurrentUser, usersController.showHomepage);
+//router.get("/home/:id", usersController.show, usersController.showHomepage);
 
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/:id", usersController.show, usersController.showView);
 router.get("/users/:id/edit", usersController.edit);
 router.put("/users/:id/update", usersController.update, usersController.redirectView);
+router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
 
 router.post("/posts/:id/create", postsController.create, postsController.redirectView);
 router.delete("/posts/:id/delete", postsController.delete, postsController.redirectView);
