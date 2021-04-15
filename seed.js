@@ -12,53 +12,69 @@ mongoose.connection;
 
 var contacts = [
     {
-        firstName: "Fernando",
-        lastName: "Campos",
+        name: {
+            first: "Fernando",
+            last: "Campos"
+        },
         dateOfBirth: "DOB",
         userName: "TheFernster",
         email: "fern@mail.com",
         password: "Thepassword123",
-        securityQuestion: "something",
-        securityAnswer: "something",
+        security: {
+            securityQuestion: "something",
+            securityAnswer: "something",
+        },
         gender: "Male",
         location: "USA",
         description: "Some guy that lives in a world"
     },
     {
-        firstName: "Jon",
-        lastName: "Wexler",
+        name: {
+            first: "Jon",
+            last: "Wexler"
+        },
         dateOfBirth: "DOB",
         userName: "Wexlington",
         email: "jonwexler@mail.com",
         password: "Booktime55",
-        securityQuestion: "something",
-        securityAnswer: "something",
+        security: {
+            securityQuestion: "something",
+            securityAnswer: "something",
+        },
         gender: "Male",
         location: "USA",
         description: "Made a book to help make web apps"
     },
     {
-        firstName: "Felix",
-        lastName: "Lengyel",
+        name: {
+            first: "Felix",
+            last: "Lengyel"
+        },
         dateOfBirth: "DOB",
         userName: "xQcOW",
         email: "xqc@mail.com",
         password: "Dud73841",
-        securityQuestion: "something",
-        securityAnswer: "something",
+        security: {
+            securityQuestion: "something",
+            securityAnswer: "something",
+        },
         gender: "Male",
         location: "Canada",
         description: "A dud"
     },
     {
-        firstName: "Jennifer",
-        lastName: "Lopez",
+        name: {
+            first: "Jennifer",
+            last: "Lopez"
+        },
         dateOfBirth: "DOB",
         userName: "JLO",
         email: "JLO@mail.com",
         password: "XYZxyz189",
-        securityQuestion: "something",
-        securityAnswer: "something",
+        security: {
+            securityQuestion: "something",
+            securityAnswer: "something",
+        },
         gender: "Female",
         location: "USA",
         description: "Singer in a world"
@@ -74,28 +90,18 @@ User.deleteMany()
 var commands = [];
 
 contacts.forEach(c => {
+    let newUser = new User(c);
     commands.push(
-        User.create({
-            firstName: c.firstName,
-            lastName: c.lastName,
-            dateOfBirth: c.dateOfBirth,
-            userName: c.userName,
-            email: c.email,
-            password: c.password,
-            securityQuestion: c.securityQuestion,
-            securityAnswer: c.securityAnswer,
-            gender: c.gender,
-            description: c.description
-        })
+        User.register(newUser, c.password)
     );
 });
 
 Promise.all(commands)
-.then(r=>{
-    console.log(JSON.stringify(r));
-    mongoose.connection.close();
-})
-.catch(error=>{
-    console.log(`ERROR: ${error}`);
-});
+    .then(r => {
+        console.log(JSON.stringify(r));
+        mongoose.connection.close();
+    })
+    .catch(error => {
+        console.log(`ERROR: ${error}`);
+    });
 
